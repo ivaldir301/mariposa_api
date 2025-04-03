@@ -5,3 +5,4 @@ class Job(BaseModel):
     job_title: str
     job_description: str
     posted_date: str
+    job_post_link: str
