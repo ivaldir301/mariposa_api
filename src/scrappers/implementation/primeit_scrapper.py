@@ -12,10 +12,11 @@ load_dotenv()
 class PrimeITScrapper(JobSiteScrapper):
     
     def __init__(self):
-        self.website_url = os.getenv("PRIMEIT_JOB_LISTING_BASE_URL")
+        self.website_url = ""
         self.scrapper_origin = "PrimeIT"
         self.collected_jobs = []
         self.raw_html = None
+        self.current_page = 0
 
     async def get_website_data(self, retries=5, backoff_factor=1.0, timeout=10.0):
         """
@@ -51,15 +52,24 @@ class PrimeITScrapper(JobSiteScrapper):
                     print("Max retries reached. Failing...")
                     raise
 
-    async def check_pagination_end(container):
-        # Todo -> MAKE A VERIFICATION METHOD FOR WHEN THE JOB LISTING PAGINATION ENDS
-        pass
+    async def generate_paginated_url(self) -> str:
+        self.current_page += 1
+        print(os.getenv("PRIMEIT_JOB_LISTING_BASE_URL") + "/page/" + str(self.current_page))
+        if self.current_page == 1:
+            return os.getenv("PRIMEIT_JOB_LISTING_BASE_URL")
+        return os.getenv("PRIMEIT_JOB_LISTING_BASE_URL") + "/page/" + str(self.current_page)
+
+    async def check_pagination_end(self, container):
+        if container:
+            has_children = any(child.tag is not None for child in container.iter())
+            has_text = container.text(strip=True) != ""
+            if not has_children and not has_text:
+                return False
+            return True
 
     async def parse_raw_html(self, parsed_data):
-        jobs_container = parsed_data.css_first("#start-carrers > div.width-medium.list-entries.z10 > div.jobs-list.active") 
-        
-        if jobs_container:
-            container = jobs_container.css_first("div.jobs-list-content")
+        if parsed_data:
+            container = parsed_data.css_first("div.jobs-list-content")
             for job in container.css("article"):
                 job_title_component = job.css_first("header > div.entrie-left > h4")
                 job_description_component = job.css_first(".content-editor")
@@ -76,8 +86,13 @@ class PrimeITScrapper(JobSiteScrapper):
             print("job container not found")
 
     async def run_scrapper(self):
-        await self.get_website_data()
-        parser = HTMLParser(self.raw_html)
-
-        await self.parse_raw_html(parser)
+        while True:
+            self.website_url = await self.generate_paginated_url()
+            await self.get_website_data()
+            parser = HTMLParser(self.raw_html)
+            container = parser.css_first("#start-carrers > div.width-medium.list-entries.z10 > div.jobs-list.active > div.jobs-list-content")
+            if await self.check_pagination_end(container):
+                await self.parse_raw_html(container)
+            else:
+                break
         return self.collected_jobs
