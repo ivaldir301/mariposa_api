@@ -81,7 +81,7 @@ class PrimeITScrapper(JobSiteScrapper):
                     posted_date="None",
                     job_post_link=job_link_component.attributes["href"]
                 )
-                self.collected_jobs.append(new_job)
+                self.collected_jobs.append(new_job.json())
         else:
             print("job container not found")
 

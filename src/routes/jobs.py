@@ -9,4 +9,4 @@ async def get_all_jobs():
 
     new_job = PrimeITScrapper()
     job_list = await new_job.run_scrapper()
-    return json.dumps([crypto.dict() for crypto in job_list], indent=2)
+    return json.dumps(job_list)
