@@ -11,14 +11,12 @@ COPY . .
 
 WORKDIR /app/src
 
-RUN python3 -m venv venv
-
 COPY requirements.txt requirements.txt
 
 RUN pip install --upgrade pip
+
 RUN pip install -r requirements.txt
 
+EXPOSE 8080
 
-EXPOSE 9000
-
-CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "9000"]
+CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]
