@@ -3,7 +3,7 @@ services:
     name: mariposa-api
     env: docker
     plan: free
-    region: oregon  # or frankfurt depending on your location
+    region: frankfurt
     dockerfilePath: ./Dockerfile
     autoDeploy: true
     buildFilter:
