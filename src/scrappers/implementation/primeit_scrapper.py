@@ -5,6 +5,7 @@ from selectolax.parser import HTMLParser
 from dotenv import load_dotenv
 import asyncio
 import httpx
+import json
 import os
 
 load_dotenv()
@@ -81,7 +82,7 @@ class PrimeITScrapper(JobSiteScrapper):
                     posted_date="None",
                     job_post_link=job_link_component.attributes["href"]
                 )
-                self.collected_jobs.append(new_job.json())
+                self.collected_jobs.append(new_job.model_dump_json())
         else:
             print("job container not found")
 
