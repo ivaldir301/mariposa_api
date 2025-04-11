@@ -9,4 +9,6 @@ async def get_all_jobs():
 
     new_job = PrimeITScrapper()
     job_list = await new_job.run_scrapper()
-    return json.dumps(job_list)
+    for job in job_list:
+        print(type(job))
+    return job_list
