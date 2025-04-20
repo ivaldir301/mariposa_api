@@ -1,5 +1,5 @@
-from src.repository.database.services.job_service import get_all_jobs_from_db
-from src.scrappers.implementation.primeit_scrapper import PrimeITScrapper
+from repository.database.services.job_service import get_all_jobs_from_db
+from scrappers.implementation.primeit_scrapper import PrimeITScrapper
 from fastapi import APIRouter
 
 router = APIRouter()

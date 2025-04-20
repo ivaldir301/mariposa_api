@@ -1,7 +1,7 @@
-from src.repository.database.services.job_service import create_raw_job
-from src.scrappers.abstract.job_site_scrapper import JobSiteScrapper
+from repository.database.services.job_service import create_raw_job
+from scrappers.abstract.job_site_scrapper import JobSiteScrapper
 from httpx import HTTPStatusError, RequestError
-from src.scrappers.models.jobs_model import Job
+from scrappers.models.jobs_model import Job
 from selectolax.parser import HTMLParser
 from dotenv import load_dotenv
 import asyncio
