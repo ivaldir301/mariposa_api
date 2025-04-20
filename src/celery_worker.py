@@ -15,7 +15,7 @@ celery = Celery(
 celery.conf.beat_schedule = {
     "run-scraper-every-30-minutes": {
         "task": "src.tasks.run_primeit_scrapper",
-        "schedule": 30.0,
+        "schedule": 300.0,
     }
 }
 
