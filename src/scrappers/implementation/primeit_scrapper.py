@@ -1,6 +1,7 @@
-from scrappers.abstract.job_site_scrapper import JobSiteScrapper
+from src.repository.database.services.job_service import create_raw_job
+from src.scrappers.abstract.job_site_scrapper import JobSiteScrapper
 from httpx import HTTPStatusError, RequestError
-from scrappers.models.jobs_model import Job
+from src.scrappers.models.jobs_model import Job
 from selectolax.parser import HTMLParser
 from dotenv import load_dotenv
 import asyncio
@@ -18,6 +19,10 @@ class PrimeITScrapper(JobSiteScrapper):
         self.collected_jobs = []
         self.raw_html = None
         self.current_page = 0
+
+    async def save(self):
+        for job in self.collected_jobs:
+            await create_raw_job(job)
 
     async def get_website_data(self, retries=5, backoff_factor=1.0, timeout=10.0):
         """
@@ -96,4 +101,4 @@ class PrimeITScrapper(JobSiteScrapper):
                 await self.parse_raw_html(container)
             else:
                 break
-        return self.collected_jobs
+        await self.save()

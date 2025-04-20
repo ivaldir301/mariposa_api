@@ -1,16 +1,49 @@
 services:
   - type: web
     name: mariposa-api
-    env: docker
+    env: python
     plan: free
     region: frankfurt
-    dockerfilePath: ./Dockerfile
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn src.main:app --host 0.0.0.0 --port 10000
     autoDeploy: true
-    buildFilter:
-      paths:
-        - Dockerfile
-        - requirements.txt
-        - src/**
     envVars:
       - key: PORT
         value: 9000
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: mariposa-redis
+
+  - type: worker
+    name: mariposa-celery-worker
+    env: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A src.worker.celery_app worker --loglevel=info
+    autoDeploy: true
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: mariposa-redis
+
+  - type: worker
+    name: mariposa-celery-beat
+    env: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A src.worker.celery_app beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    autoDeploy: true
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: mariposa-redis
+
+databases:
+  - name: mariposa-redis
+    plan: free
+    region: frankfurt
