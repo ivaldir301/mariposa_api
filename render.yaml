@@ -14,6 +14,10 @@ services:
         fromService:
           type: redis
           name: mariposa-redis
+      - key: MONGODB_URI
+        fromService:
+          type: mongodb
+          name: mariposa-mongodb
 
   - type: worker
     name: mariposa-celery-worker
@@ -28,6 +32,10 @@ services:
         fromService:
           type: redis
           name: mariposa-redis
+      - key: MONGODB_URI
+        fromService:
+          type: mongodb
+          name: mariposa-mongodb
 
   - type: worker
     name: mariposa-celery-beat
@@ -42,8 +50,16 @@ services:
         fromService:
           type: redis
           name: mariposa-redis
+      - key: MONGODB_URI
+        fromService:
+          type: mongodb
+          name: mariposa-mongodb
 
 databases:
   - name: mariposa-redis
+    plan: free
+    region: frankfurt
+
+  - name: mariposa-mongodb
     plan: free
     region: frankfurt
