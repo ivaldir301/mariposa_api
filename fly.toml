@@ -1,0 +1,27 @@
+app = "mariposa-api"
+primary_region = "fra"
+
+[build]
+  image = "your-docker-image"  # Replace with your Docker image name
+
+[env]
+  PORT = "9000"
+  REDIS_URL = "redis://<your-redis-url>"
+  MONGODB_URI = "mongodb+srv://<your-mongodb-uri>"
+
+[[services]]
+  internal_port = 9000
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+[processes]
+  web = "uvicorn main:app --host 0.0.0.0 --port 9000"
+  celery_worker = "celery -A src.worker.celery_app worker --loglevel=info"
+  celery_beat = "celery -A src.worker.celery_app beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler"&#8203;:contentReference[oaicite:5]{index=5}
