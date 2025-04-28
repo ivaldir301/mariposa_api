@@ -19,3 +19,4 @@ def get_api_health():
     return {
         "message": "API HEALTHY!"
     }
+    
