@@ -9,8 +9,8 @@ primary_region = "fra"
   REDIS_URL = "redis://localhost:6379/0"
   MONGODB_URI = "mongodb://localhost:27017"
 
-
 [[services]]
+  processes = ["web"]
   internal_port = 9000
   protocol = "tcp"
 
@@ -26,5 +26,3 @@ primary_region = "fra"
   web = "uvicorn src.main:app --host 0.0.0.0 --port 9000"
   celery_worker = "celery -A worker.celery_app worker --loglevel=info"
   celery_beat = "celery -A worker.celery_app beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
-
-
