@@ -1,5 +1,5 @@
-from repository.database.models import DynamicModel
-from repository.database.db import collection
+from src.repository.database.models import DynamicModel
+from src.repository.database.db import collection
 from fastapi.encoders import jsonable_encoder
 from fastapi import HTTPException
 from bson import ObjectId
