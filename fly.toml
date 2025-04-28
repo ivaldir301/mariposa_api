@@ -1,9 +1,6 @@
 app = "mariposa-api"
 primary_region = "fra"
 
-[build]
-  image = "Dockerfile"
-
 [env]
   PORT = "9000"
   REDIS_URL = "redis://localhost:6379/0"
