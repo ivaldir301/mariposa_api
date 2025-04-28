@@ -25,3 +25,5 @@ primary_region = "fra"
   web = "uvicorn main:app --host 0.0.0.0 --port 9000"
   celery_worker = "celery -A src.worker.celery_app worker --loglevel=info"
   celery_beat = "celery -A src.worker.celery_app beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler"&#8203;:contentReference[oaicite:5]{index=5}
+
+
