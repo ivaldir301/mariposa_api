@@ -1,5 +1,4 @@
-[app]
-  name = "mariposa-api"
+app = "mariposa-api"
 
 [[services]]
   internal_port = 8080
