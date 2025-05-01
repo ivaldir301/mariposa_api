@@ -1,9 +1,21 @@
 # db.py
-import motor.motor_asyncio
 import os
+import certifi
+from dotenv import load_dotenv
+import motor.motor_asyncio
+from pymongo.server_api import ServerApi
 
-MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGODB_URI)
+load_dotenv()
 
-db = client["your_database_name"]
+MONGODB_URI = os.getenv("MONGODB_URI")
+
+client = motor.motor_asyncio.AsyncIOMotorClient(
+    MONGODB_URI,
+    server_api=ServerApi('1'),           
+    tls=True,
+    tlsCAFile=certifi.where(),
+    serverSelectionTimeoutMS=20000,
+)
+
+db = client["mariposa"]
 collection = db["raw_jobs"]

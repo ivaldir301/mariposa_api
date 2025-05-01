@@ -29,3 +29,13 @@ async def get_all_jobs_from_db() -> list:
     async for job in cursor:
         jobs.append(fix_object_id(job))
     return jobs
+
+async def check_if_job_exists(job_title: str, job_description: str):
+    job = await collection.find_one({
+        "job_title": job_title,
+        "job_description": job_description
+        }
+    )
+    if job is None:
+            return None
+    return job

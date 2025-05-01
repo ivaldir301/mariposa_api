@@ -9,13 +9,18 @@ REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 celery = Celery(
     "mariposa",
     broker=REDIS_URL,
-    backend=REDIS_URL
+    backend=REDIS_URL,
+    include=["src.tasks"]
 )
 
+# after your celery = Celery(...) block
+celery.conf.enable_utc = True
+celery.conf.timezone = "Europe/Lisbon"  # or "UTC" if you prefer
+
 celery.conf.beat_schedule = {
-    "run-scraper-every-30-minutes": {
+    "run-scraper-every-5-minutes": {
         "task": "src.tasks.run_primeit_scrapper",
-        "schedule": 300.0,
+        "schedule": 120.0  
     }
 }
 
