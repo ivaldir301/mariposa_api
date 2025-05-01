@@ -7,6 +7,13 @@ app = "mariposa-api"
   [[services.ports]]
     port = 80
 
+  f[services.checks]
+    type = "http"
+    path = "/healthz"
+    interval = "5s"
+    timeout = "2s"
+    grace_period = "30s"
+
   # Optional: if you want HTTPS on the default domain
   [[services.ports]]
     handlers = ["tls", "http"]
