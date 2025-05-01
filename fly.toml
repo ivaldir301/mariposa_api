@@ -1,0 +1,14 @@
+[app]
+  name = "mariposa-api"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = 80
+
+  # Optional: if you want HTTPS on the default domain
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
