@@ -14,9 +14,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/health")
-def get_api_health():
-    return {
-        "message": "API HEALTHY!"
-    }
-    
+@app.get("/healthz")
+async def healthz():
+    return {"status": "ok"}
