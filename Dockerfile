@@ -1,27 +1,21 @@
-#syntax:docker/dockerfile:1
- 
+# syntax=docker/dockerfile:1
 FROM python:3.13-slim
- 
-WORKDIR app/
 
-RUN apt-get update && apt-get install -y \
-uvicorn
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY requirements.txt ./
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-WORKDIR /app/src
-
-RUN python3 -m venv venv
-
-COPY requirements.txt requirements.txt
+EXPOSE 8080
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-
-EXPOSE 9000
-
-# CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "9000"]
-
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
