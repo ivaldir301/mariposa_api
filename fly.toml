@@ -7,7 +7,7 @@ app = "mariposa-api"
   [[services.ports]]
     port = 80
 
-  f[services.checks]
+  [services.checks]
     type = "http"
     path = "/healthz"
     interval = "5s"
