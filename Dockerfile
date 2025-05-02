@@ -6,6 +6,11 @@ RUN apt-get update && \
       supervisor \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+  && update-ca-certificates
+
+
 WORKDIR /app
 
 COPY requirements.txt ./
