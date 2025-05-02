@@ -1,24 +1,23 @@
-app = "mariposa-api"
-primary_region = "fra"
+# fly.toml app configuration file generated for mariposa-api-7lgl0w on 2025-05-02T08:54:30Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-[env]
-  PORT             = "8080"
-  BROKER_URL       = "amqp://guest:guest@mariposa-rabbitmq.internal:5672//"
+app = 'mariposa-api-7lgl0w'
+primary_region = 'cdg'
 
-[[services]]
-  processes    = ["web"]
+[build]
+
+[http_service]
   internal_port = 8080
-  protocol     = "tcp"
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
 
-  [[services.ports]]
-    handlers = ["http"]
-    port     = 80
-
-  [[services.ports]]
-    handlers = ["tls","http"]
-    port     = 443
-
-[processes]
-  web          = "uvicorn src.main:app --host 0.0.0.0 --port 8080"
-  celery_worker = "celery -A src.celery worker --loglevel=info"
-  celery_beat  = "celery -A src.celery beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 1024
