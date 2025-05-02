@@ -20,6 +20,6 @@ primary_region = "fra"
     port     = 443
 
 [processes]
-  web          = "uvicorn src.main:app --host 0.0.0.0 --port $PORT"
-  celery_worker = "celery -A src.celery_worker worker --loglevel=info"
-  celery_beat  = "celery -A src.celery_worker beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+  web          = "uvicorn src.main:app --host 0.0.0.0 --port 8080"
+  celery_worker = "celery -A src.celery worker --loglevel=info"
+  celery_beat  = "celery -A src.celery beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
